@@ -37,3 +37,281 @@ String getGrade(int score) {
 }
 
 
+
+Question 2
+
+import 'dart:math';
+void main() {
+  List<String> students = ["Alice", "Bob", "Charlie", "Diana", "Eve"];
+  Map<String, int> scores = {};
+  Random random = Random();
+
+  for (var student in students) {
+    scores[student] = 60 + random.nextInt(41);
+  }
+
+  String topStudent = scores.keys.first;
+  String lowStudent = scores.keys.first;
+  int totalScore = 0;
+
+  for (var entry in scores.entries) {
+    totalScore += entry.value;
+    if (entry.value > scores[topStudent]!) topStudent = entry.key;
+    if (entry.value < scores[lowStudent]!) lowStudent = entry.key;
+  }
+
+  double average = totalScore / students.length;
+
+  print("Student Scores:");
+  scores.forEach((name, score) {
+    print("$name: $score - ${getCategory(score)}");
+  });
+
+  print("\nHighest Score: $topStudent (${scores[topStudent]})");
+  print("Lowest Score: $lowStudent (${scores[lowStudent]})");
+  print("Average Score: ${average.toStringAsFixed(2)}");
+}
+
+String getCategory(int score) {
+  switch (score ~/ 10) {
+    case 10:
+    case 9:
+      return "Excellent";
+    case 8:
+      return "Good";
+    case 7:
+      return "Average";
+    default:
+      return "Needs Improvement";
+  }
+}
+
+
+
+Question 3
+
+class BankAccount {
+  String accountNumber;
+  String accountHolder;
+  double balance;
+  String accountType;
+
+  BankAccount(this.accountNumber, this.accountHolder, this.accountType)
+      : balance = 0.0;
+
+  void deposit(double amount) {
+    balance += amount;
+  }
+
+  void withdraw(double amount) {
+    if (amount <= balance) {
+      balance -= amount;
+    } else {
+      print("Insufficient funds for withdrawal of $amount from account $accountNumber");
+    }
+  }
+
+  double getBalance() {
+    return balance;
+  }
+
+  void displayAccountInfo() {
+    print("Account: $accountNumber, Holder: $accountHolder, Type: $accountType, Balance: $balance");
+  }
+}
+
+void main() {
+  BankAccount acc1 = BankAccount("12345", "Alice", "Savings");
+  BankAccount acc2 = BankAccount("67890", "Bob", "Checking");
+  BankAccount acc3 = BankAccount("54321", "Charlie", "Savings");
+
+  acc1.deposit(1500.0);
+  acc2.deposit(1000.0);
+  acc3.deposit(500.0);
+
+  acc2.withdraw(200.0);
+  acc2.withdraw(1000.0); 
+
+  acc1.displayAccountInfo();
+  acc2.displayAccountInfo();
+  acc3.displayAccountInfo();
+}
+
+
+
+Question 4
+
+abstract class Vehicle {
+  String brand;
+  String model;
+  int year;
+
+  Vehicle(this.brand, this.model, this.year);
+
+  void start();
+  void stop();
+
+  void displayInfo() {
+    print("Vehicle Info: $year $brand $model");
+  }
+
+  int calculateAge() {
+    int currentYear = DateTime.now().year;
+    return currentYear - year;
+  }
+}
+
+class Car extends Vehicle {
+  int numberOfDoors;
+
+  Car(String brand, String model, int year, this.numberOfDoors)
+      : super(brand, model, year);
+
+  @override
+  void start() {
+    print("Starting the car engine...");
+  }
+
+  @override
+  void stop() {
+    print("Stopping the car engine...");
+  }
+
+  @override
+  void displayInfo() {
+    print("Vehicle Info: $year $brand $model ($numberOfDoors doors)");
+  }
+}
+
+class Motorcycle extends Vehicle {
+  bool hasWindshield;
+
+  Motorcycle(String brand, String model, int year, this.hasWindshield)
+      : super(brand, model, year);
+
+  @override
+  void start() {
+    print("Starting the motorcycle engine...");
+  }
+
+  @override
+  void stop() {
+    print("Stopping the motorcycle engine...");
+  }
+
+  @override
+  void displayInfo() {
+    print("Vehicle Info: $year $brand $model (Has windshield: $hasWindshield)");
+  }
+}
+
+void main() {
+  List<Vehicle> vehicles = [
+    Car("Toyota", "Camry", 2020, 4),
+    Motorcycle("Honda", "CBR", 2021, true)
+  ];
+
+  for (var v in vehicles) {
+    v.displayInfo();
+    v.start();
+    v.stop();
+    print("");
+  }
+
+  Car car = vehicles[0] as Car;
+  Motorcycle bike = vehicles[1] as Motorcycle;
+
+  print("Car age: ${car.calculateAge()} years");
+  print("Motorcycle age: ${bike.calculateAge()} years");
+}
+
+
+
+Question 5
+
+mixin Payable {
+  double calculateSalary(double baseSalary, double bonus) {
+    return baseSalary + bonus;
+  }
+
+  void processPayment(double amount) {
+    print("Payment processed: $amount");
+  }
+}
+
+mixin Reportable {
+  String generateReport(String employeeName, String department) {
+    return "Monthly report for $employeeName in $department department";
+  }
+}
+
+abstract class Employee {
+  String name;
+  String id;
+  String department;
+
+  Employee(this.name, this.id, this.department);
+
+  String getJobTitle();
+  double getBaseSalary();
+
+  void displayInfo() {
+    print("Employee: $name (ID: $id, Department: $department)");
+  }
+}
+
+class Manager extends Employee with Payable, Reportable {
+  int teamSize;
+
+  Manager(String name, String id, String department, this.teamSize)
+      : super(name, id, department);
+
+  @override
+  String getJobTitle() => "Manager";
+
+  @override
+  double getBaseSalary() => 8000.0;
+
+  void displayManagerInfo() {
+    print("Manager: $name (ID: $id, Department: $department, Team Size: $teamSize)");
+  }
+}
+
+class Developer extends Employee with Payable {
+  String programmingLanguage;
+
+  Developer(String name, String id, String department, this.programmingLanguage)
+      : super(name, id, department);
+
+  @override
+  String getJobTitle() => "Senior Developer";
+
+  @override
+  double getBaseSalary() => 6000.0;
+
+  void displayDeveloperInfo() {
+    print("Developer: $name (ID: $id, Department: $department, Language: $programmingLanguage)");
+  }
+}
+
+void main() {
+  Manager manager = Manager("John Smith", "M001", "IT", 5);
+  Developer developer = Developer("Alice Johnson", "D001", "IT", "Dart");
+
+  manager.displayManagerInfo();
+  print("Job Title: ${manager.getJobTitle()}");
+  print("Base Salary: ${manager.getBaseSalary()}");
+  double managerSalary = manager.calculateSalary(manager.getBaseSalary(), 1000.0);
+  print("Calculated Salary: $managerSalary");
+  manager.processPayment(managerSalary);
+  print("Report: ${manager.generateReport(manager.name, manager.department)}\n");
+
+  developer.displayDeveloperInfo();
+  print("Job Title: ${developer.getJobTitle()}");
+  print("Base Salary: ${developer.getBaseSalary()}");
+  double devSalary = developer.calculateSalary(developer.getBaseSalary(), 500.0);
+  print("Calculated Salary: $devSalary");
+  developer.processPayment(devSalary);
+}
+
+
